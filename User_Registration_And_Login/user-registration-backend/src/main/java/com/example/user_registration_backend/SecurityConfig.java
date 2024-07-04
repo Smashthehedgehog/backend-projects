@@ -47,8 +47,9 @@ public class SecurityConfig {
 
     @Bean public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin())) // REMOVE THIS AND H2-CONSOLE WHEN H2 DATA NO LONGER NEEDS TO BE SEEN
                 .csrf(AbstractHttpConfigurer::disable) // Use HTTP Basic authentication
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/register").permitAll()
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/register", "/h2-console/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults());
         return http.build();

@@ -33,6 +33,15 @@ public class UserController {
         return ResponseEntity.ok("User registered successfully");
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User user) {
+        User foundUser = userRepository.findByUsername(user.getUsername());
+        if (foundUser == null || !passwordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
+            return ResponseEntity.badRequest().body("Invalid username or password");
+        }
+        return ResponseEntity.ok("Login successful");
+    }
+
     private boolean isValid(String password) {
         if (password == null || password.length() < 8) {
             return false; // Password must be at least 8 characters long

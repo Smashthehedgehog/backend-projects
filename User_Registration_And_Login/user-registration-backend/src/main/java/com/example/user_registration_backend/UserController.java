@@ -20,6 +20,14 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
 
+        if (user.getFirstname().isEmpty()) {
+            return ResponseEntity.badRequest().body("Insert a first name");
+        }
+
+        if (user.getLastname().isEmpty()) {
+            return ResponseEntity.badRequest().body("Insert a last name");
+        }
+
         if (userRepository.findByUsername(user.getUsername()) != null) {
             return ResponseEntity.badRequest().body("Username is already taken");
         }
